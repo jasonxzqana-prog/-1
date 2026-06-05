@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>飞鑫抖音监测看板</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>飞鑫抖音监测看板</h1>
+        <p id="subtitle">读取最新日报中...</p>
+      </div>
+      <button id="refreshButton" type="button">刷新数据</button>
+    </header>
+
+    <main>
+      <section class="controls">
+        <label>
+          日报文件
+          <select id="fileSelect"></select>
+        </label>
+        <label>
+          月份
+          <input id="monthInput" type="month">
+        </label>
+        <label>
+          经纪人
+          <select id="agentFilter"></select>
+        </label>
+        <label>
+          搜索主播
+          <input id="anchorSearch" type="search" placeholder="昵称 / 抖音号">
+        </label>
+      </section>
+
+      <section id="errorPanel" class="notice hidden"></section>
+
+      <details class="upload-panel">
+        <summary>上传 / 更新数据</summary>
+        <form id="uploadForm" class="upload-form">
+          <label>
+            上传密码
+            <input id="uploadPassword" name="password" type="password" autocomplete="current-password" placeholder="管理员密码">
+          </label>
+          <label>
+            每日日报 CSV
+            <input name="dailyFile" type="file" accept=".csv">
+          </label>
+          <label>
+            月任务 CSV
+            <input name="taskFile" type="file" accept=".csv">
+          </label>
+          <label>
+            过程任务 CSV
+            <input name="processTaskFile" type="file" accept=".csv">
+          </label>
+          <label>
+            拉新任务 CSV
+            <input name="newAnchorTaskFile" type="file" accept=".csv">
+          </label>
+          <button type="submit">上传并刷新</button>
+          <span id="uploadStatus"></span>
+        </form>
+      </details>
+
+      <section class="summary-grid">
+        <article class="metric">
+          <span>目标总流水</span>
+          <strong id="targetAmount">-</strong>
+        </article>
+        <article class="metric">
+          <span>已完成流水</span>
+          <strong id="completedAmount">-</strong>
+        </article>
+        <article class="metric">
+          <span>完成率</span>
+          <strong id="completionRate">-</strong>
+        </article>
+        <article class="metric">
+          <span>距目标差</span>
+          <strong id="remainingAmount">-</strong>
+        </article>
+        <article class="metric">
+          <span>剩余每日需完成</span>
+          <strong id="requiredDailyAmount">-</strong>
+        </article>
+        <article class="metric">
+          <span>有效主播 / 总主播</span>
+          <strong id="anchorCount">-</strong>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>经纪人进度</h2>
+            <p id="agentHint">点击经纪人查看主播明细。</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>经纪人</th>
+                <th>日报名称</th>
+                <th class="num">目标</th>
+                <th class="num">完成</th>
+                <th class="num">完成率</th>
+                <th class="num">差额</th>
+                <th class="num">每日需完成</th>
+                <th class="num">主播</th>
+              </tr>
+            </thead>
+            <tbody id="agentRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>主播明细</h2>
+            <p id="anchorHint">按经纪人分组，点击卡片展开主播。</p>
+          </div>
+        </div>
+        <div id="agentAnchorGroups" class="agent-anchor-groups"></div>
+      </section>
+    </main>
+
+    <div id="anchorDetailModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="anchorDetailTitle">
+      <div class="modal-backdrop" data-detail-close></div>
+      <section class="modal-panel">
+        <header class="modal-header">
+          <div>
+            <h2 id="anchorDetailTitle">主播详情</h2>
+            <p id="anchorDetailSubtitle"></p>
+          </div>
+          <button class="modal-close" type="button" data-detail-close>关闭</button>
+        </header>
+        <div id="anchorDetailBody" class="modal-body"></div>
+      </section>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
